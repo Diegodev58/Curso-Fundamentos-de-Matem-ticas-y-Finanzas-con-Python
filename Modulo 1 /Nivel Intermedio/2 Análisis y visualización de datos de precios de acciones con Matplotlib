@@ -1,0 +1,90 @@
+ Ya tienes los datos organizados con Pandas y el poder de cálculo de NumPy. Ahora, vamos a hacer que esos números hablen con gráficos. Esto es crucial en finanzas, porque un gráfico puede mostrarte una tendencia o un riesgo mucho más rápido que una tabla de números.
+
+-----
+
+### Módulo 1: Fundamentos de Matemáticas y Finanzas con Python
+
+#### Nivel Intermedio: Análisis y Visualización con Matplotlib
+
+**Matplotlib** es la librería más popular en Python para crear gráficos y visualizaciones. Piensa en ella como tu "pintor" o "artista" de datos. En el mundo financiero, la usaremos para dibujar el historial de precios de una acción, lo que llamamos un **gráfico de líneas de tiempo**.
+
+### 1\. Preparando los datos (Usando Pandas)
+
+Antes de pintar el gráfico, necesitamos los datos en un formato ordenado (un DataFrame de Pandas) y la librería `matplotlib.pyplot` (a la que llamaremos `plt`).
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# 1. Creamos un DataFrame con precios de acciones y sus fechas
+data = {
+    'Precio_Cierre': [100.0, 101.5, 102.0, 100.5, 103.0, 105.0],
+    'Fecha': pd.to_datetime(['2024-03-01', '2024-03-02', '2024-03-03', '2024-03-04', '2024-03-05', '2024-03-06'])
+}
+
+df_precios = pd.DataFrame(data)
+
+# 2. Establecemos la columna 'Fecha' como el índice (el eje X del tiempo)
+df_precios = df_precios.set_index('Fecha')
+
+print("DataFrame de precios listo para graficar:")
+print(df_precios)
+```
+
+### 2\. Creando el Gráfico de Líneas
+
+Un gráfico de líneas es la forma estándar de visualizar series de tiempo. Muestra cómo una variable (el precio) cambia con respecto a otra (el tiempo).
+
+```python
+# 1. Creamos el gráfico de líneas
+# El eje X (horizontal) toma el índice (las fechas) y el eje Y (vertical) toma la columna 'Precio_Cierre'
+plt.figure(figsize=(10, 6)) # Define el tamaño de la imagen (ancho x alto)
+
+# La función .plot() toma el índice y la columna que queremos dibujar
+plt.plot(df_precios.index, df_precios['Precio_Cierre'], label='Precio de Cierre', color='blue')
+
+# 2. Agregamos etiquetas y títulos para que sea entendible
+plt.title('Historial de Precios de la Acción (Ejemplo)')
+plt.xlabel('Fecha')
+plt.ylabel('Precio (USD)')
+plt.grid(True) # Agrega una cuadrícula para facilitar la lectura
+plt.legend() # Muestra la etiqueta definida en la función plot()
+
+# 3. Mostramos el gráfico
+plt.show()
+# 
+```
+
+**Analizando el Gráfico:**
+
+Al mirar el gráfico, puedes ver instantáneamente la **tendencia** de la acción. En nuestro ejemplo, el precio generalmente sube, lo que indica una tendencia alcista durante ese periodo. En un vistazo, puedes identificar:
+
+  * **Máximos y Mínimos:** ¿Cuál fue el día más caro o más barato?
+  * **Volatilidad:** ¿Qué tan bruscos fueron los cambios de un día a otro? Si la línea es muy dentada, hay alta volatilidad.
+
+### 3\. Personalización: Agregando Puntos Clave
+
+Podemos agregar elementos al gráfico para resaltar información financiera importante. Por ejemplo, si compramos la acción en un día y vendimos en otro.
+
+```python
+# Agregamos marcadores al gráfico
+plt.figure(figsize=(10, 6))
+plt.plot(df_precios.index, df_precios['Precio_Cierre'], label='Precio de Cierre', color='blue')
+
+# Resaltamos el punto de Compra (primer día)
+plt.scatter(df_precios.index[0], df_precios['Precio_Cierre'][0], color='green', s=100, label='Punto de Compra')
+
+# Resaltamos el punto de Venta (último día)
+plt.scatter(df_precios.index[-1], df_precios['Precio_Cierre'][-1], color='red', s=100, label='Punto de Venta')
+
+# Repetimos las etiquetas y el título
+plt.title('Análisis Visual de Transacción')
+plt.xlabel('Fecha')
+plt.ylabel('Precio (USD)')
+plt.legend()
+plt.grid(True)
+plt.show()
+# 
+```
+
+Como puedes ver, con unas pocas líneas de código, hemos transformado una tabla aburrida en una poderosa herramienta visual de análisis. La visualización es el primer paso para la toma de decisiones financieras.
