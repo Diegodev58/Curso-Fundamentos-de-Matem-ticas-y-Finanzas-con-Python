@@ -1,0 +1,110 @@
+¡Absolutamente\! Has llegado al punto donde el Cálculo se une con la toma de decisiones. La **Optimización** es el proceso de encontrar la mejor solución (el máximo beneficio o el mínimo costo) dentro de un conjunto de posibilidades.
+
+En finanzas y negocios, la optimización es la meta final:
+
+  * **Maximización:** Maximizar el rendimiento de una cartera, las ganancias de un proyecto.
+  * **Minimización:** Minimizar el riesgo, los costos de producción o las pérdidas.
+
+-----
+
+### Módulo 3: Fundamentos de Cálculo y Optimización
+
+#### Nivel Intermedio: Optimización Básica con Python
+
+En el Módulo 3, Nivel Básico, vimos que la **derivada** ($\frac{dy}{dx}$) es **cero** en los puntos donde una función alcanza un máximo o un mínimo. Esto se llama el **criterio de la primera derivada**.
+
+Para programar la optimización, usaremos la librería **SciPy** y su módulo `optimize`, que tiene herramientas muy potentes para encontrar estos puntos.
+
+### 1\. Problema de Minimización: Minimizando Pérdidas
+
+Comencemos con un problema común en la gestión de operaciones o finanzas corporativas: **minimizar el costo**.
+
+**Caso de Estudio:** Una fábrica ha modelado sus costos de producción ($C$) en función de la cantidad de unidades producidas ($x$). La función de costo es:
+
+$$C(x) = x^2 - 10x + 50$$
+
+Queremos encontrar la cantidad de unidades ($x$) que resulta en el **menor costo posible**.
+
+#### Implementación con SciPy
+
+La función `scipy.optimize.minimize` está diseñada para encontrar el valor de $x$ que hace que la función sea lo más baja posible.
+
+```python
+from scipy.optimize import minimize
+import numpy as np
+
+# 1. Definimos la función de Costo (C(x)) que queremos MINIMIZAR
+def funcion_costo(x):
+    # x: es la cantidad de unidades producidas (debe ser un array para SciPy)
+    # C(x) = x^2 - 10x + 50
+    return x[0]**2 - 10*x[0] + 50
+
+# 2. Definimos una "adivinanza" inicial (punto de partida)
+# SciPy necesita un valor inicial para comenzar su búsqueda.
+x0 = np.array([0.0])
+
+# 3. Ejecutamos la función de minimización
+# El método 'Powell' o 'Nelder-Mead' son buenos para funciones simples.
+resultado_minimizacion = minimize(funcion_costo, x0, method='Powell')
+
+# 4. Extraemos el resultado óptimo
+unidades_optimas = resultado_minimizacion.x[0]
+costo_minimo = resultado_minimizacion.fun
+
+print("--- 1. Optimización para Minimizar Costos ---")
+print(f"Resultado de la Optimización: {resultado_minimizacion.success}")
+print(f"Unidades (x) que minimizan el Costo: {unidades_optimas:.2f}")
+print(f"Costo Mínimo Obtenido: ${costo_minimo:.2f}")
+
+# Conclusión Matemática (Usando la derivada):
+# dC/dx = 2x - 10. Si 2x - 10 = 0, entonces x = 5.
+# El costo mínimo ocurre al producir 5 unidades, y el costo es C(5) = 5^2 - 10(5) + 50 = 25.
+# SciPy encuentra este mismo punto con alta precisión.
+```
+
+-----
+
+### 2\. Problema de Maximización: Maximizando Ganancias
+
+La función de optimización de SciPy solo hace **minimización**. Para maximizar una función de Ganancia ($G(x)$), usamos un truco matemático: **minimizar la función negativa** de la ganancia, $-G(x)$.
+
+  * Encontrar el $\text{Máximo de } G(x)$ es lo mismo que encontrar el $\text{Mínimo de } -G(x)$.
+
+**Caso de Estudio:** Una empresa tiene una función de Ganancia ($G$) que depende de la inversión en publicidad ($x$):
+
+$$G(x) = -0.05x^2 + 5x$$
+
+Queremos encontrar la inversión en publicidad ($x$) que **maximice la ganancia**.
+
+#### Implementación con Python (Función Negativa)
+
+```python
+# 1. Definimos la función de Ganancia G(x)
+def funcion_ganancia(x):
+    return -0.05*x[0]**2 + 5*x[0]
+
+# 2. Definimos la función NEGATIVA de Ganancia que queremos MINIMIZAR
+def funcion_a_minimizar(x):
+    return -funcion_ganancia(x)
+
+# 3. Definimos una "adivinanza" inicial
+x0 = np.array([0.0])
+
+# 4. Ejecutamos la minimización (que en realidad nos da el máximo de la ganancia)
+resultado_optimo = minimize(funcion_a_minimizar, x0, method='Powell')
+
+# 5. Extraemos el resultado
+inversion_optima = resultado_optimo.x[0]
+ganancia_maxima = funcion_ganancia(np.array([inversion_optima])) # Usamos la función original
+
+print("\n--- 2. Optimización para Maximizar Ganancias ---")
+print(f"Inversión Óptima (x) en Publicidad: ${inversion_optima:.2f}")
+print(f"Ganancia Máxima Obtenida: ${ganancia_maxima:.2f}")
+
+# Conclusión: Al invertir $50 en publicidad, la ganancia máxima esperada es $125.
+# (Puedes verificar con la derivada: dG/dx = -0.1x + 5. Si -0.1x + 5 = 0, entonces x = 50).
+```
+
+La optimización es fundamental para la toma de decisiones en cualquier campo: logística, finanzas, ingeniería y más.
+
+Has superado los niveles de Cálculo. ¿Estás listo para dar el salto al Nivel Avanzado y aplicar estas herramientas a la gestión de portafolios con la **Teoría Moderna de Portafolios (MPT)**? 😊
